@@ -28,25 +28,31 @@
     }
   ],
   "projects": [
-    {
-      "name": "E-Commerce Platform",
-      "description": "Full-stack e-commerce solution with React, Node.js, and MongoDB",
-      "github": "https://github.com/yourusername/ecommerce-platform",
-      "tech": ["React", "Node.js", "MongoDB", "Redis"]
-    },
-    {
-      "name": "Real-time Chat Application",
-      "description": "WebSocket-based chat app with end-to-end encryption",
-      "github": "https://github.com/yourusername/chat-app",
-      "tech": ["Socket.io", "Express", "PostgreSQL"]
-    },
-    {
-      "name": "DevOps Dashboard",
-      "description": "Monitoring dashboard for containerized applications",
-      "github": "https://github.com/yourusername/devops-dashboard",
-      "tech": ["Vue.js", "Docker", "Kubernetes", "Prometheus"]
-    }
-  ],
+  {
+    "name": "Clinical Application UI & Backend Testing",
+    "description": "Tested a healthcare clinical application involving patient management, lab results, and provider workflows. Validated UI functionality and backend data consistency from multiple external systems.",
+    "github": "",
+    "tech": ["Web UI Testing", "Backend Validation", "Healthcare Domain", "HL7"]
+  },
+  {
+    "name": "Selenium Automation Test Suite",
+    "description": "Designed and developed a Selenium-based automation framework using POM and BDD principles to automate regression and smoke test cases for a clinical web application.",
+    "github": "",
+    "tech": ["Selenium WebDriver", "Java", "TestNG", "POM", "BDD"]
+  },
+  {
+    "name": "HL7 Test Data Import & Validation Tool",
+    "description": "Built an internal testing tool to generate and import HL7 test data, enabling non-HL7 users to test patient and lab workflows without manual message creation.",
+    "github": "",
+    "tech": ["HL7", "Healthcare Integration", "Test Data Management", "Automation Support"]
+  },
+  {
+    "name": "Mobile Clinical App Testing",
+    "description": "Performed functional, regression, and compatibility testing for iOS and Android clinical applications using real devices and cloud-based device farms.",
+    "github": "",
+    "tech": ["Android Testing", "iOS Testing", "Seecloud", "Mobile QA"]
+  }
+],
   "certifications": [
     {
       "name": "AWS Certified Solutions Architect",
@@ -68,4 +74,5 @@
     }
   ]
 }
+
 
