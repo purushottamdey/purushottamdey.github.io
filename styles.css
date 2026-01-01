@@ -46,7 +46,6 @@ body {
     height: 100vh;
     overflow: hidden;
     line-height: 1.6;
-    zoom: 0.8;
 }
 
 /* Terminal Container */
@@ -2596,3 +2595,4 @@ body {
 .mini-output-line.success {
     color: #10b981;
 }
+
