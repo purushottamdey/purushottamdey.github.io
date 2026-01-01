@@ -8,15 +8,17 @@
   "linkedin": "https://www.linkedin.com/in/purushottam-dey2/",
   "about": "I'm a passionate developer with expertise in building modern web applications.\nI love creating efficient, scalable solutions and exploring new technologies.\nCurrently focused on full-stack development with a keen interest in DevOps and cloud technologies.",
   "skills": [
-    { "name": "JavaScript/TypeScript", "level": "Expert", "icon": "code" },
-    { "name": "React/Vue/Angular", "level": "Advanced", "icon": "component" },
-    { "name": "Node.js/Express", "level": "Advanced", "icon": "server" },
-    { "name": "Python/Django", "level": "Intermediate", "icon": "python" },
-    { "name": "Database (SQL/NoSQL)", "level": "Advanced", "icon": "database" },
-    { "name": "Docker/Kubernetes", "level": "Intermediate", "icon": "container" },
-    { "name": "AWS/Azure/GCP", "level": "Intermediate", "icon": "cloud" },
-    { "name": "Git/CI/CD", "level": "Advanced", "icon": "git" }
-  ],
+  { "name": "Manual Testing (Web & Mobile)", "level": "Expert", "icon": "check-circle" },
+  { "name": "Automation Testing (Selenium)", "level": "Advanced", "icon": "automation" },
+  { "name": "Playwright", "level": "Intermediate", "icon": "browser" },
+  { "name": "Mobile App Testing (Android & iOS)", "level": "Advanced", "icon": "mobile" },
+  { "name": "Test Framework Design (POM, BDD)", "level": "Advanced", "icon": "layers" },
+  { "name": "API Testing (REST)", "level": "Advanced", "icon": "api" },
+  { "name": "HL7 Message Testing", "level": "Advanced", "icon": "activity" },
+  { "name": "JIRA & Confluence (JQL)", "level": "Advanced", "icon": "workflow" },
+  { "name": "CI/CD & Git", "level": "Intermediate", "icon": "git-branch" },
+  { "name": "Cross-Browser & Device Testing (Seecloud)", "level": "Advanced", "icon": "devices" }
+],
   "experience": [
     {
       "title": "Jr. QA Engineer",
@@ -66,3 +68,4 @@
     }
   ]
 }
+
