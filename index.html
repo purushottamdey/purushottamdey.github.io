@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.8, maximum-scale=2.0, user-scalable=yes">
+    <title>Terminal Portfolio</title>
+    <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- particles.js container -->
+    <div id="particles-js"></div>
+
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <div class="header-buttons">
+                <span class="btn-close"></span>
+                <span class="btn-minimize" onclick="terminal.minimizeTerminal()"></span>
+                <span class="btn-maximize"></span>
+            </div>
+            <div class="terminal-title">visitor@portfolio:~$</div>
+        </div>
+        
+        <div class="terminal-body" id="terminal">
+            <div class="output-container" id="output">
+                <!-- ASCII Art Banner -->
+                <pre class="ascii-art" id="banner">
+██████╗  ██████╗ ██████╗ ████████╗███████╗ ██████╗ ██╗     ██╗ ██████╗ 
+██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝██╔═══██╗██║     ██║██╔═══██╗
+██████╔╝██║   ██║██████╔╝   ██║   █████╗  ██║   ██║██║     ██║██║   ██║
+██╔═══╝ ██║   ██║██╔══██╗   ██║   ██╔══╝  ██║   ██║██║     ██║██║   ██║
+██║     ╚██████╔╝██║  ██║   ██║   ██║     ╚██████╔╝███████╗██║╚██████╔╝
+╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝      ╚═════╝ ╚══════╝╚═╝ ╚═════╝ 
+                </pre>
+                
+                <div class="welcome-text">
+                    <p>Welcome to my interactive terminal portfolio!</p>
+                    <p>Type <span class="highlight">'ls'</span> to see all available commands.</p>
+                    <p>Quick access: <span class="highlight">scan</span>, <span class="highlight">hack</span>, <span class="highlight">recon</span>, <span class="highlight">netstat</span></p>
+                    <p>Navigation: Use keyboard only. Mouse is disabled in terminal mode.</p>
+                </div>
+            </div>
+            
+            <div class="input-line">
+                <span class="prompt">visitor@portfolio:~$</span>
+                <input type="text" id="commandInput" class="command-input" autocomplete="off" autofocus spellcheck="false">
+            </div>
+        </div>
+    </div>
+
+    <!-- Minimized Terminal Card -->
+    <div class="minimized-terminal-card" id="minimizedTerminal" style="display: none;">
+        <div class="mini-card-header">
+            <div class="mini-card-title">
+                <span class="terminal-icon">▶</span> TERMINAL
+            </div>
+            <span class="mini-expand-btn" onclick="terminal.expandTerminal()">⤢</span>
+        </div>
+        <div class="mini-card-body">
+            <div class="mini-output" id="miniOutput"></div>
+            <div class="mini-input-line">
+                <span class="mini-prompt">$</span>
+                <input type="text" id="miniCommandInput" class="mini-command-input" autocomplete="off" spellcheck="false">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Reveal Detail Popup -->
+    <div class="reveal-detail-popup" id="revealDetailPopup">
+        <div class="reveal-detail-content">
+            <div class="reveal-detail-close" id="closeDetailPopup">×</div>
+            
+            <div class="detail-header">
+                <div class="detail-avatar">
+                    <img src="" alt="Profile" id="detailAvatar">
+                </div>
+                <div class="detail-info">
+                    <h2 id="detailName">---</h2>
+                    <h3 id="detailRole">---</h3>
+                    <p id="detailCompany">---</p>
+                </div>
+            </div>
+            
+            <div class="detail-section">
+                <h4>Core Competencies</h4>
+                <div class="detail-skills-grid" id="detailSkills"></div>
+            </div>
+            
+            <div class="detail-section">
+                <h4>Work History</h4>
+                <div id="detailExperience"></div>
+            </div>
+            
+            <div class="detail-section">
+                <h4>Projects</h4>
+                <div id="detailProjects"></div>
+            </div>
+            
+            <div class="detail-section">
+                <h4>Certifications & Achievements</h4>
+                <div id="detailCertifications"></div>
+            </div>
+            
+            <div class="detail-section">
+                <h4>Contact Information</h4>
+                <div class="detail-contact-grid" id="detailContact"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Intro Sequence -->
+    <div class="intro-sequence" id="introSequence">
+        <!-- Target Acquired Screen -->
+        <div class="target-screen" id="targetScreen">
+            <!-- HUD Crosshair -->
+            <div class="hud-crosshair">
+                <div class="crosshair-v"></div>
+                <div class="crosshair-h"></div>
+                <div class="crosshair-circle"></div>
+            </div>
+            
+            <!-- Scanning Grid -->
+            <div class="scan-grid"></div>
+            
+            <!-- ID Card Wrapper -->
+            <div class="id-card-wrapper">
+                <div class="id-card">
+                    <div class="profile-row">
+                        <div class="dp">
+                            <div class="dp-arc-outer"></div>
+                            <div class="dp-arc-inner"></div>
+                            <img src="" id="profileImg">
+                        </div>
+                        <div class="desc">
+                            <h1>TARGET IDENTIFIED</h1>
+                            <p><span class="label">Name:</span> <span id="targetName">SCANNING...</span></p>
+                            <p><span class="label">Status:</span> <span id="targetStatus" class="scanning">ACQUIRING...</span></p>
+                            <p><span class="label">Threat:</span> <span class="success">FRIENDLY</span></p>
+                            <p><span class="label">Distance:</span> <span id="distance">1000.0m</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Biometric Scan Progress -->
+                    <div class="scan-section">
+                        <div class="scan-title">BIOMETRIC VERIFICATION</div>
+                        <div class="scan-progress">
+                            <div class="progress-bar" id="scanProgress"></div>
+                        </div>
+                        <div class="biometric-data">
+                            <div class="bio-item">
+                                <span class="bio-label">RETINAL SCAN:</span>
+                                <span class="bio-value scanning" id="retinal">SCANNING...</span>
+                            </div>
+                            <div class="bio-item">
+                                <span class="bio-label">FACIAL RECOGNITION:</span>
+                                <span class="bio-value scanning" id="facial">SCANNING...</span>
+                            </div>
+                            <div class="bio-item">
+                                <span class="bio-label">VOICE MATCH:</span>
+                                <span class="bio-value scanning" id="voice">SCANNING...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reveal Card (appears after reveal popup) -->
+            <div class="reveal-card-wrapper" id="revealCardWrapper" style="display: none; opacity: 0;">
+                <div class="id-card reveal-card">
+                    <div class="profile-row">
+                        <div class="dp">
+                            <div class="dp-arc-outer"></div>
+                            <div class="dp-arc-inner"></div>
+                            <img src="" id="revealProfileImg">
+                        </div>
+                        <div class="desc">
+                            <h1>DATA CONFIRMED</h1>
+                            <p><span class="label">Name: </span><span id="revealCardName">---</span></p>
+                            <p><span class="label">Role: </span><span id="revealCardRole">---</span></p>
+                            <p><span class="label">Company: </span><span id="revealCardCompany">---</span></p>
+                            <p><span class="label">Experience: </span><span id="revealCardExp" class="success">---</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Skills Section -->
+                    <div class="scan-section">
+                        <div class="scan-title">CORE COMPETENCIES</div>
+                        <div class="skills-grid" id="revealCardSkills">
+                            <!-- Skills will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Experience Section -->
+                    <div class="scan-section" style="margin-top: 12px;">
+                        <div class="scan-title">WORK HISTORY</div>
+                        <div class="experience-list" id="revealCardExperience">
+                            <!-- Experience will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Section -->
+                    <div class="scan-section" style="margin-top: 12px;">
+                        <div class="scan-title">CONTACT CHANNELS</div>
+                        <div class="biometric-data">
+                            <div class="bio-item">
+                                <span class="bio-label">EMAIL:</span>
+                                <span class="bio-value success" id="revealCardEmail">---</span>
+                            </div>
+                            <div class="bio-item">
+                                <span class="bio-label">GITHUB:</span>
+                                <span class="bio-value success" id="revealCardGithub">---</span>
+                            </div>
+                            <div class="bio-item">
+                                <span class="bio-label">LINKEDIN:</span>
+                                <span class="bio-value success" id="revealCardLinkedin">---</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Target Lock Text -->
+            <div class="target-text" id="targetLockText">SCANNING TARGET</div>
+            
+            <!-- Globe Canvas on same screen -->
+            <div id="globeCanvas" style="opacity: 0;"></div>
+            
+            <!-- Corner Coordinates -->
+            <div class="coordinates coord-tl">LAT: 00.0000 | LONG: 00.0000</div>
+            <div class="coordinates coord-br">ALT: 0000m | RANGE: 000m</div>
+            
+            <!-- AI Mesh Card (right side) -->
+            <div class="ai-mesh-card" id="aiMeshCard" style="display: none; opacity: 0;">
+                <div class="mesh-card-header">
+                    <h2>AI ANALYSIS</h2>
+                    <div class="status-indicator">
+                        <span class="pulse-dot"></span>
+                        <span>ACTIVE</span>
+                    </div>
+                </div>
+                <canvas id="meshCanvas" width="400" height="500"></canvas>
+                <div class="mesh-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">NODES:</span>
+                        <span class="stat-value" id="nodeCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">CONNECTIONS:</span>
+                        <span class="stat-value" id="connectionCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">PATTERN:</span>
+                        <span class="stat-value">HUMANOID</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Terminal Footer Bar -->
+        <div class="terminal-footer-bar" id="terminalFooterBar">
+            <div class="footer-bar-content">
+                <div class="footer-left">
+                    <span class="footer-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="4 17 10 11 4 5"></polyline>
+                            <line x1="12" y1="19" x2="20" y2="19"></line>
+                        </svg>
+                    </span>
+                    <span class="footer-title">TERMINAL</span>
+                    <span class="footer-status">Ready</span>
+                </div>
+                <div class="footer-right">
+                    <span class="footer-hint">Click to open terminal interface</span>
+                    <span class="footer-chevron">▲</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Satellite & Globe Screen -->
+        <div class="globe-screen" id="globeScreen">
+            <!-- ID Card on Globe Screen -->
+            <div class="id-card-globe" id="idCardGlobe">
+                <div class="id-card">
+                    <div class="profile-row">
+                        <div class="dp">
+                            <div class="dp-arc-outer"></div>
+                            <div class="dp-arc-inner"></div>
+                            <img src="https://ui-avatars.com/api/?name=Your+Name&size=420&background=0AE0DF&color=122023&bold=true" id="profileImgGlobe">
+                        </div>
+                        <div class="desc">
+                            <h1>TARGET CONFIRMED</h1>
+                            <p><span class="label">Name:</span> <span id="targetNameGlobe">LOCKED</span></p>
+                            <p><span class="label">Status:</span> <span id="targetStatusGlobe" class="success">ACTIVE</span></p>
+                            <p><span class="label">Threat:</span> <span class="success">FRIENDLY</span></p>
+                            <p><span class="label">Distance:</span> <span id="distanceGlobe">0.0m</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Biometric Scan Progress -->
+                    <div class="scan-section">
+                        <div class="scan-title">BIOMETRIC VERIFICATION</div>
+                        <div class="scan-progress">
+                            <div class="progress-bar complete" id="scanProgressGlobe"></div>
+                        </div>
+                        <div class="biometric-data">
+                            <div class="bio-item">
+                                <span class="bio-label">RETINAL SCAN:</span>
+                                <span class="bio-value success" id="retinalGlobe">MATCH ✓</span>
+                            </div>
+                            <div class="bio-item">
+                                <span class="bio-label">FACIAL RECOGNITION:</span>
+                                <span class="bio-value success" id="facialGlobe">MATCH ✓</span>
+                            </div>
+                            <div class="bio-item">
+                                <span class="bio-label">VOICE MATCH:</span>
+                                <span class="bio-value success" id="voiceGlobe">MATCH ✓</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="globeCanvas"></div>
+            <div class="connection-status" id="connectionStatus">
+                <div class="status-text">ESTABLISHING SATELLITE LINK...</div>
+                <div class="signal-bars">
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Center Terminals -->
+        <div class="datacenter-screen" id="datacenterScreen">
+            <div class="datacenter-popup">
+                <div class="popup-header">
+                    <div class="header-icon">
+                        <svg class="humbleicons hi-search" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><g stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="m20 20-6-6"/><path d="M15 9.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0Z"/></g></svg>
+                    </div>
+                    <h2>GLOBAL DATABASE SEARCH</h2>
+                </div>
+                <div class="datacenter-grid" id="datacenterGrid">
+                    <!-- Terminals will be generated dynamically -->
+                </div>
+                <div class="search-status" id="searchStatus">
+                    <div class="status-message">SEARCHING GLOBAL DATABASES...</div>
+                    <div class="search-progress">
+                        <div class="search-bar"></div>
+                    </div>
+                </div>
+                
+                <!-- Data Found Section (hidden initially) -->
+                <div class="data-found-section" id="dataFoundSection" style="display: none;">
+                    <div class="data-found-msg">✓ DATA FOUND</div>
+                    <div class="copying-container">
+                        <div class="copying-text">EXTRACTING DATA FROM SECURE SERVER...</div>
+                        <div class="copy-progress-container">
+                            <div class="copy-progress-bar" id="copyProgressBar"></div>
+                            <div class="copy-percentage" id="copyPercentage">0%</div>
+                        </div>
+                        <div class="transfer-info">
+                            <span>Transfer Rate: <span class="highlight" id="transferRate">0 MB/s</span></span>
+                            <span>Time Remaining: <span class="highlight" id="timeRemaining">30s</span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reveal Section (hidden initially) -->
+                <div class="reveal-section-popup" id="revealSectionPopup" style="display: none;">
+                    <div class="reveal-profile-card">
+                        <div class="reveal-info-row">
+                            <div class="info-label">NAME:</div>
+                            <div class="info-value" id="revealName">Loading...</div>
+                        </div>
+                        <div class="reveal-info-row">
+                            <div class="info-label">CURRENT POSITION:</div>
+                            <div class="info-value" id="revealRole">Loading...</div>
+                        </div>
+                        <div class="reveal-info-row">
+                            <div class="info-label">COMPANY:</div>
+                            <div class="info-value" id="revealCompany">Loading...</div>
+                        </div>
+                        <div class="reveal-info-row">
+                            <div class="info-label">EXPERIENCE:</div>
+                            <div class="info-value" id="revealExperience">Loading...</div>
+                        </div>
+                        <div class="reveal-info-row">
+                            <div class="info-label">SKILLS:</div>
+                            <div class="skills-grid" id="revealSkills">
+                                <!-- Skills will be added dynamically -->
+                            </div>
+                        </div>
+                        <div class="reveal-info-row">
+                            <div class="info-label">CERTIFICATIONS:</div>
+                            <div class="certifications-list" id="revealCertifications">
+                                <!-- Certifications will be added dynamically -->
+                            </div>
+                        </div>
+                        <div class="reveal-info-row">
+                            <div class="info-label">CONTACT:</div>
+                            <div class="contact-grid" id="revealContact">
+                                <!-- Contact details will be added dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Found & Copying -->
+        <div class="copying-screen" id="copyingScreen">
+            <div class="data-found-msg">DATA FOUND</div>
+            <div class="copying-container">
+                <div class="copying-text">EXTRACTING DATA FROM SECURE SERVER...</div>
+                <div class="copy-progress-container">
+                    <div class="copy-progress-bar" id="copyProgressBar"></div>
+                    <div class="copy-percentage" id="copyPercentage">0%</div>
+                </div>
+                <div class="transfer-info">
+                    <span>Transfer Rate: <span class="highlight" id="transferRate">0 MB/s</span></span>
+                    <span>Time Remaining: <span class="highlight" id="timeRemaining">30s</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Reveal Screen -->
+        <div class="reveal-screen" id="revealScreen">
+            <div class="reveal-container" id="revealContainer">
+                <!-- Data will be revealed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/PCDLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three.meshline@1.4.0/src/THREE.MeshLine.js"></script>
+    <script src="https://unpkg.com/globe.gl"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="intro.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

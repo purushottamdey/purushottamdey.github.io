@@ -1,0 +1,68 @@
+{
+  "name": "Purushottam Dey",
+  "title": "Jr. QA Engineer",
+  "location": "working remotely from Kolkata, India",
+  "photo": "assets/images/profile.png",
+  "email": "purushottam.dey@outlook.com",
+  "github": "https://github.com/purushottamdey",
+  "linkedin": "https://www.linkedin.com/in/purushottam-dey2/",
+  "about": "I'm a passionate developer with expertise in building modern web applications.\nI love creating efficient, scalable solutions and exploring new technologies.\nCurrently focused on full-stack development with a keen interest in DevOps and cloud technologies.",
+  "skills": [
+    { "name": "JavaScript/TypeScript", "level": "Expert", "icon": "code" },
+    { "name": "React/Vue/Angular", "level": "Advanced", "icon": "component" },
+    { "name": "Node.js/Express", "level": "Advanced", "icon": "server" },
+    { "name": "Python/Django", "level": "Intermediate", "icon": "python" },
+    { "name": "Database (SQL/NoSQL)", "level": "Advanced", "icon": "database" },
+    { "name": "Docker/Kubernetes", "level": "Intermediate", "icon": "container" },
+    { "name": "AWS/Azure/GCP", "level": "Intermediate", "icon": "cloud" },
+    { "name": "Git/CI/CD", "level": "Advanced", "icon": "git" }
+  ],
+  "experience": [
+    {
+      "title": "Jr. QA Engineer",
+      "company": "The Elixr Labs",
+      "duration": "2022 - Present",
+      "description": "As a Qa Engineer, I am responsible for designing and executing test plans, identifying bugs, and ensuring the quality of software products through automated and manual testing."
+    }
+  ],
+  "projects": [
+    {
+      "name": "E-Commerce Platform",
+      "description": "Full-stack e-commerce solution with React, Node.js, and MongoDB",
+      "github": "https://github.com/yourusername/ecommerce-platform",
+      "tech": ["React", "Node.js", "MongoDB", "Redis"]
+    },
+    {
+      "name": "Real-time Chat Application",
+      "description": "WebSocket-based chat app with end-to-end encryption",
+      "github": "https://github.com/yourusername/chat-app",
+      "tech": ["Socket.io", "Express", "PostgreSQL"]
+    },
+    {
+      "name": "DevOps Dashboard",
+      "description": "Monitoring dashboard for containerized applications",
+      "github": "https://github.com/yourusername/devops-dashboard",
+      "tech": ["Vue.js", "Docker", "Kubernetes", "Prometheus"]
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Certified Solutions Architect",
+      "issuer": "Amazon Web Services",
+      "date": "2023",
+      "credentialId": "ABC123XYZ"
+    },
+    {
+      "name": "Certified Kubernetes Administrator",
+      "issuer": "Cloud Native Computing Foundation",
+      "date": "2022",
+      "credentialId": "CKA-2022-001"
+    },
+    {
+      "name": "Professional Scrum Master I",
+      "issuer": "Scrum.org",
+      "date": "2021",
+      "credentialId": "PSM-123456"
+    }
+  ]
+}
