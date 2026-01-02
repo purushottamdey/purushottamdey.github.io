@@ -2,6 +2,87 @@
 const introSequence = {
     globe: null,
     userData: null,
+    soundEffect: null,
+    audioEnabled: false,
+    loopingAudio: null,
+    
+    // Initialize sound effect
+    initSound: function() {
+        if (!this.soundEffect) {
+            this.soundEffect = new Audio('models/computer-processing-sound-effect-01-122131.mp3');
+            this.soundEffect.volume = 0.4;
+        }
+    },
+    
+    // Enable audio on first user interaction
+    enableAudio: function() {
+        if (!this.audioEnabled) {
+            this.initSound();
+            // Try to play and immediately pause to unlock audio
+            this.soundEffect.play().then(() => {
+                this.soundEffect.pause();
+                this.soundEffect.currentTime = 0;
+                this.audioEnabled = true;
+                console.log('✓ Audio enabled - sounds will now play during animations');
+            }).catch(() => {
+                this.audioEnabled = false;
+            });
+        }
+    },
+    
+    // Play beep sound effect
+    playSound: function() {
+        if (!this.audioEnabled) return; // Don't play if audio disabled
+        
+        this.initSound();
+        if (!this.soundEffect) return;
+        
+        try {
+            this.soundEffect.currentTime = 0;
+            const playPromise = this.soundEffect.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log('🔊 Sound played');
+                }).catch(e => {
+                    console.log('⚠️ Sound blocked');
+                });
+            }
+        } catch (e) {
+            console.log('Sound play error:', e);
+        }
+    },
+    
+    // Start looping audio for database search
+    startLoopingAudio: function() {
+        if (!this.audioEnabled) return;
+        
+        if (!this.loopingAudio) {
+            this.loopingAudio = new Audio('models/computer-processing-sound-effect-01-122131.mp3');
+            this.loopingAudio.volume = 0.3;
+            this.loopingAudio.loop = true;
+        }
+        
+        try {
+            this.loopingAudio.currentTime = 0;
+            this.loopingAudio.play().then(() => {
+                console.log('🔁 Looping audio started');
+            }).catch(e => {
+                console.log('Looping audio blocked:', e);
+            });
+        } catch (e) {
+            console.log('Looping audio error:', e);
+        }
+    },
+    
+    // Stop looping audio
+    stopLoopingAudio: function() {
+        if (this.loopingAudio) {
+            this.loopingAudio.pause();
+            this.loopingAudio.currentTime = 0;
+            console.log('🔇 Looping audio stopped');
+        }
+    },
     
     // Load user data from JSON file
     loadData: async function() {
@@ -163,34 +244,82 @@ const introSequence = {
         }
     },
     
+    showSoundPrompt: function() {
+        return new Promise((resolve) => {
+            const soundPrompt = document.getElementById('soundPrompt');
+            const soundYes = document.getElementById('soundYes');
+            const soundNo = document.getElementById('soundNo');
+            const hudElements = document.getElementById('hudElements');
+            const scanGrid = document.querySelector('.scan-grid');
+            const idCardWrapper = document.querySelector('.id-card-wrapper');
+            
+            // Prompt is already visible, just setup handlers
+            
+            soundYes.onclick = () => {
+                this.audioEnabled = true;
+                this.enableAudio();
+                anime({
+                    targets: soundPrompt,
+                    opacity: [1, 0],
+                    duration: 300,
+                    easing: 'easeOutQuad',
+                    complete: () => {
+                        soundPrompt.style.display = 'none';
+                        hudElements.style.display = 'block';
+                        scanGrid.style.display = 'block';
+                        idCardWrapper.style.display = 'block';
+                    }
+                });
+                console.log('🔊 Audio enabled by user');
+                resolve();
+            };
+            
+            soundNo.onclick = () => {
+                this.audioEnabled = false;
+                anime({
+                    targets: soundPrompt,
+                    opacity: [1, 0],
+                    duration: 300,
+                    easing: 'easeOutQuad',
+                    complete: () => {
+                        soundPrompt.style.display = 'none';
+                        hudElements.style.display = 'block';
+                        scanGrid.style.display = 'block';
+                        idCardWrapper.style.display = 'block';
+                    }
+                });
+                console.log('🔇 Audio disabled by user');
+                resolve();
+            };
+        });
+    },
+    
     // Step 1: Target Acquired with HUD Animation
-    showTargetAcquired: function() {
+    showTargetAcquired: async function() {
         console.log('Showing target acquired screen...');
         const targetScreen = document.getElementById('targetScreen');
         targetScreen.style.display = 'flex';
+        targetScreen.style.opacity = '1';
         
         // Set profile images
         this.setProfileImages();
         
+        // Show sound prompt and wait for user choice
+        await this.showSoundPrompt();
+        
+        // Now play sound and continue with animation
+        this.playSound(); // Sound effect
+        
         if (typeof anime === 'undefined') {
             console.error('Anime.js not loaded!');
-            targetScreen.style.opacity = '1';
             this.animateHUDElements();
             setTimeout(() => this.moveProfileToLeft(), 5000);
             return;
         }
         
-        anime({
-            targets: targetScreen,
-            opacity: [0, 1],
-            duration: 1000,
-            easing: 'easeOutQuad',
-            complete: () => {
-                console.log('Target acquired animation complete');
-                this.animateHUDElements();
-                setTimeout(() => this.moveProfileToLeft(), 5000);
-            }
-        });
+        // Continue with HUD animations
+        this.animateHUDElements();
+        setTimeout(() => this.moveProfileToLeft(), 5000);
     },
     
     setProfileImages: function() {
@@ -303,6 +432,7 @@ const introSequence = {
     // Step 3: Show globe with integrated orbiting satellite
     showSatelliteAndGlobe: function() {
         console.log('Starting globe with orbiting satellite...');
+        this.playSound(); // Sound effect
         const globeCanvas = document.getElementById('globeCanvas');
         
         // Create 3D globe (satellite is added inside)
@@ -513,6 +643,11 @@ const introSequence = {
     
     // Step 4: Show data centers with mini terminals
     showDataCenters: function() {
+        this.playSound(); // Sound effect
+        
+        // Start looping audio
+        this.startLoopingAudio();
+        
         const globeScreen = document.getElementById('globeScreen');
         const datacenterScreen = document.getElementById('datacenterScreen');
         
@@ -749,6 +884,9 @@ const introSequence = {
                     duration: 1200,
                     easing: 'easeInOutCubic',
                     complete: () => {
+                        // Stop looping audio when data reveal animation ends
+                        this.stopLoopingAudio();
+                        
                         // Show AI mesh card after reveal card animation
                         this.showAIMeshCard();
                     }
@@ -758,6 +896,7 @@ const introSequence = {
     },
     
     showAIMeshCard: function() {
+        this.playSound(); // Sound effect
         const aiMeshCard = document.getElementById('aiMeshCard');
         
         aiMeshCard.style.display = 'block';
@@ -1339,14 +1478,22 @@ const introSequence = {
     
 
     toggleTerminal: function() {
+        this.playSound(); // Sound effect
         const terminalContainer = document.querySelector('.terminal-container');
-        const isVisible = terminalContainer.style.display === 'flex';
+        const introSequence = document.getElementById('introSequence');
         
-        if (isVisible) {
+        // Check if terminal is actually visible (not just display:flex but also has opacity)
+        const isTerminalVisible = terminalContainer.style.display === 'flex' && 
+                                  window.getComputedStyle(terminalContainer).opacity === '1';
+        const isIntroVisible = introSequence.style.display !== 'none' && 
+                               window.getComputedStyle(introSequence).opacity === '1';
+        
+        if (isTerminalVisible) {
             this.returnFromTerminal();
-        } else {
+        } else if (isIntroVisible) {
             this.openTerminal();
         }
+        // If neither is fully visible, do nothing (animation in progress)
     },
     
     openTerminal: function() {
@@ -1360,7 +1507,9 @@ const introSequence = {
             easing: 'easeOutQuad',
             complete: async () => {
                 introSequence.style.display = 'none';
+                introSequence.style.pointerEvents = 'none';
                 terminalContainer.style.display = 'flex';
+                terminalContainer.style.pointerEvents = 'auto';
                 terminalContainer.classList.add('loaded');
                 
                 // Initialize terminal
@@ -1385,7 +1534,9 @@ const introSequence = {
             easing: 'easeOutQuad',
             complete: () => {
                 terminalContainer.style.display = 'none';
+                terminalContainer.style.pointerEvents = 'none';
                 introSequence.style.display = 'flex';
+                introSequence.style.pointerEvents = 'auto';
                 
                 anime({
                     targets: introSequence,

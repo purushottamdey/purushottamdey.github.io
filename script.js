@@ -143,27 +143,7 @@ const terminal = {
         },
         whoami: {
             description: "Display current user info",
-            execute: () => terminal.showAbout()
-        },
-        scan: {
-            description: "Scan target profile data",
-            execute: () => terminal.showAbout()
-        },
-        exploit: {
-            description: "Exploit vulnerabilities (show experience)",
-            execute: () => terminal.showExperience()
-        },
-        hack: {
-            description: "Initiate hack sequence (show skills)",
-            execute: () => terminal.showSkills()
-        },
-        netstat: {
-            description: "Network status & connections",
-            execute: () => terminal.showContact()
-        },
-        recon: {
-            description: "Reconnaissance mission data",
-            execute: () => terminal.showProjects()
+            execute: () => terminal.triggerRedAlert()
         }
     },
     
@@ -270,6 +250,9 @@ const terminal = {
     executeCommand: function(input) {
         let [cmd, ...args] = input.toLowerCase().trim().split(' ');
         
+        console.log('Command received:', cmd);
+        console.log('Available commands:', Object.keys(this.commands));
+        
         // Map aliases to main command
         if (cmd === 'dir') cmd = 'ls';
         if (cmd === 'cls') cmd = 'clear';
@@ -285,6 +268,7 @@ const terminal = {
         
         // Execute command with JARVIS-style animation
         if (this.commands[cmd]) {
+            console.log('Executing command:', cmd);
             // Show system messages quickly
             this.addSystemMessage('[....] Establishing satellite connection');
             
@@ -409,6 +393,307 @@ const terminal = {
             </div>
         `;
         this.addOutput(aboutText);
+    },
+    
+    triggerRedAlert: function() {
+        // Show initial message
+        const svgIcon = this.getSVGIcon('user');
+        let aboutText = `
+            <div style="margin: 0;">
+                ${svgIcon}
+                <span class="highlight" style="font-size: 18px;">${this.userData.name}</span><br>
+                <span class="info">${this.userData.title}</span><br>
+                <span style="color: var(--warning-color);">${this.userData.location}</span>
+                <br><br>
+                <p>${this.userData.about.replace(/\n/g, '<br>')}</p>
+            </div>
+        `;
+        this.addOutput(aboutText);
+        
+        // Trigger the red alert sequence immediately for mini terminal, with delay for main
+        const isMiniTerminal = this.output && this.output.id === 'miniOutput';
+        const delay = isMiniTerminal ? 500 : 2000;
+        
+        setTimeout(() => {
+            this.startRedAlertSequence();
+        }, delay);
+    },
+    
+    startRedAlertSequence: function() {
+        // Add red alert theme to entire page
+        document.body.classList.add('red-alert-active');
+        
+        // Play alarm sound
+        const alarmSound = new Audio();
+        alarmSound.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBCiJ0/LTgjMGHm7A7+OZUQ0PVqzn77FhGQU+mdvy0YMuBSZ/zPDdi' +
+            'jcIDWSy6+OdUhAOUKXh8K5hGgU8ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8LdlGgU+ldjywH0pBCuF0PTYhzYIGWq27OylUhEPVq3o8A==';
+        alarmSound.loop = true;
+        alarmSound.volume = 0.7;
+        alarmSound.play().catch(e => console.log('Alarm autoplay blocked:', e));
+        
+        // Show red alert screen
+        const redAlertScreen = document.getElementById('redAlertScreen');
+        if (redAlertScreen) {
+            redAlertScreen.classList.add('active');
+            
+            // Simulate IP detection
+            setTimeout(() => {
+                document.getElementById('sourceIP').textContent = '192.168.1.' + Math.floor(Math.random() * 255);
+            }, 1000);
+            
+            setTimeout(() => {
+                document.getElementById('sourceLocation').textContent = 'EARTH / UNKNOWN REGION';
+            }, 2000);
+            
+            // Animate progress bar
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 2;
+                const progressBar = document.getElementById('alertProgress');
+                const progressPercent = document.getElementById('alertPercent');
+                if (progressBar && progressPercent) {
+                    progressBar.style.width = progress + '%';
+                    progressPercent.textContent = progress + '%';
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    // After progress completes, start particle voice
+                    setTimeout(() => {
+                        this.playParticleVoice(alarmSound);
+                    }, 1000);
+                }
+            }, 50);
+        }
+    },
+    
+    playParticleVoice: function(alarmSound) {
+        // Stop alarm
+        if (alarmSound) {
+            alarmSound.pause();
+            alarmSound.currentTime = 0;
+        }
+        
+        // Play random audio from interactive particles
+        const audioFiles = [
+            'models/audio/This is not magic.mp3',
+            'models/audio/This bug wasnt hiding.mp3',
+            'models/audio/No alerts.mp3'
+        ];
+        
+        const randomAudio = audioFiles[Math.floor(Math.random() * audioFiles.length)];
+        const voice = new Audio(randomAudio);
+        voice.volume = 1.0;
+        
+        voice.play().then(() => {
+            console.log('Particle voice playing:', randomAudio);
+        }).catch(e => {
+            console.log('Voice play failed:', e);
+            // If autoplay blocked, play on next user interaction
+            document.addEventListener('click', () => {
+                voice.play();
+            }, { once: true });
+        });
+        
+        // After voice plays, you can trigger next animation
+        voice.onended = () => {
+            console.log('Voice ended - ready for next animation');
+            
+            // Close red alert after 5 seconds
+            setTimeout(() => {
+                this.closeRedAlert();
+            }, 5000);
+        };
+    },
+    
+    closeRedAlert: function() {
+        // Keep red alert theme active for DDoS attack
+        // Don't remove body.red-alert-active here
+        
+        // Hide the alert screen
+        const alertScreen = document.querySelector('.red-alert-screen');
+        if (alertScreen) {
+            alertScreen.classList.remove('active');
+        }
+        
+        console.log('Red alert screen closed - theme remains active');
+        
+        // Trigger DDoS attack simulation
+        setTimeout(() => {
+            this.startDDoSAttack();
+        }, 1000);
+    },
+    
+    startDDoSAttack: async function() {
+        console.log('Starting DDoS attack simulation...');
+        
+        // Load achievement data
+        let achievements = [];
+        try {
+            const response = await fetch('achievement.json');
+            const data = await response.json();
+            achievements = data.achievements;
+        } catch (error) {
+            console.error('Failed to load achievement.json:', error);
+            return;
+        }
+        
+        const container = document.getElementById('ddosContainer');
+        if (!container) return;
+        
+        container.style.display = 'block';
+        container.innerHTML = '';
+        
+        // Take first 20 achievements
+        const selectedAchievements = achievements.slice(0, 20);
+        
+        // Create cards with random positions and delays
+        selectedAchievements.forEach((achievement, index) => {
+            setTimeout(() => {
+                this.createDDoSCard(achievement, container);
+            }, index * 200); // Stagger appearance
+        });
+    },
+    
+    createDDoSCard: function(achievement, container) {
+        const card = document.createElement('div');
+        card.className = 'ddos-card';
+        
+        // Random position
+        const randomX = Math.random() * (window.innerWidth - 350);
+        const randomY = Math.random() * (window.innerHeight - 400);
+        card.style.left = randomX + 'px';
+        card.style.top = randomY + 'px';
+        
+        // Get icon based on type
+        const icon = this.getDDoSIcon(achievement.type, achievement.icon);
+        
+        // Build card content based on type
+        let bodyContent = '';
+        
+        if (achievement.type === 'bugs') {
+            bodyContent = `
+                <div class="ddos-stat-row">
+                    <span class="ddos-stat-label">Blocker</span>
+                    <span class="ddos-stat-value critical">${achievement.blocker}</span>
+                </div>
+                <div class="ddos-stat-row">
+                    <span class="ddos-stat-label">Critical</span>
+                    <span class="ddos-stat-value high">${achievement.critical}</span>
+                </div>
+                <div class="ddos-stat-row">
+                    <span class="ddos-stat-label">Major</span>
+                    <span class="ddos-stat-value medium">${achievement.major}</span>
+                </div>
+                <div class="ddos-stat-row">
+                    <span class="ddos-stat-label">Minor</span>
+                    <span class="ddos-stat-value low">${achievement.minor}</span>
+                </div>
+                <div class="ddos-stat-row">
+                    <span class="ddos-stat-label">Trivial</span>
+                    <span class="ddos-stat-value low">${achievement.trivial}</span>
+                </div>
+                <div class="ddos-stat-row" style="margin-top: 10px; border-top: 2px solid rgba(10, 224, 223, 0.3); padding-top: 10px;">
+                    <span class="ddos-stat-label">Total Bugs</span>
+                    <span class="ddos-stat-value">${achievement.total}</span>
+                </div>
+            `;
+        } else if (achievement.type === 'tool') {
+            bodyContent = `
+                <div class="ddos-description">${achievement.description}</div>
+                ${achievement.impact ? `<div class="ddos-impact">⚡ ${achievement.impact}</div>` : ''}
+            `;
+        } else if (achievement.type === 'award' || achievement.type === 'certification') {
+            bodyContent = `
+                <div class="ddos-description">${achievement.description}</div>
+                <div class="ddos-stat-row" style="margin-top: 10px;">
+                    <span class="ddos-stat-label">Organization</span>
+                    <span class="ddos-stat-value">${achievement.organization || achievement.date || 'N/A'}</span>
+                </div>
+            `;
+        } else if (achievement.type === 'activity') {
+            bodyContent = `
+                <div class="ddos-stat-row">
+                    <span class="ddos-stat-label">Count</span>
+                    <span class="ddos-stat-value">${achievement.value}</span>
+                </div>
+                <div class="ddos-description">${achievement.description}</div>
+            `;
+        }
+        
+        card.innerHTML = `
+            <div class="ddos-close-btn" onclick="terminal.closeDDoSCard(this)">×</div>
+            <div class="ddos-card-header">
+                <div class="ddos-card-icon">${icon}</div>
+                <div class="ddos-card-title">${achievement.title}</div>
+            </div>
+            <div class="ddos-card-body">
+                ${bodyContent}
+            </div>
+        `;
+        
+        container.appendChild(card);
+        
+        // Auto-remove after some time (optional)
+        // setTimeout(() => card.remove(), 15000);
+    },
+    
+    closeDDoSCard: function(closeBtn) {
+        const card = closeBtn.parentElement;
+        const container = document.getElementById('ddosContainer');
+        
+        // Animate card removal
+        card.style.transition = 'all 0.3s ease';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.5) rotate(10deg)';
+        
+        setTimeout(() => {
+            card.remove();
+            
+            // Check if all cards are closed
+            const remainingCards = container.querySelectorAll('.ddos-card');
+            if (remainingCards.length === 0) {
+                // All cards closed - remove red theme
+                document.body.classList.remove('red-alert-active');
+                container.style.display = 'none';
+                console.log('All DDoS cards closed - red theme removed');
+            }
+        }, 300);
+    },
+    
+    getDDoSIcon: function(type, iconName) {
+        const icons = {
+            trophy: '🏆',
+            tool: '🔧',
+            dashboard: '📊',
+            document: '📄',
+            code: '💻',
+            certificate: '🎓',
+            api: '🔌',
+            chart: '📈',
+            education: '👨‍🏫',
+            bugs: '🐛',
+            shield: '🛡️',
+            database: '💾',
+            browsers: '🌐',
+            mobile: '📱',
+            ai: '🤖'
+        };
+        
+        if (iconName && icons[iconName]) {
+            return icons[iconName];
+        }
+        
+        // Default icons by type
+        const typeIcons = {
+            award: '🏆',
+            bugs: '🐛',
+            tool: '🔧',
+            activity: '📊',
+            certification: '🎓'
+        };
+        
+        return typeIcons[type] || '⚡';
     },
     
     showSkills: function() {
@@ -876,8 +1161,35 @@ const terminal = {
         if (cmd === 'projects') cmd = 'recon';
         if (cmd === 'list') cmd = 'ls';
         
+        // Special command: whoami triggers red alert
+        if (cmd === 'whoami') {
+            // Show user info first
+            const data = this.userData;
+            const currentJob = data.experience && data.experience.length > 0 ? data.experience[0] : null;
+            output = `<div style="color: #00E5FF; margin-bottom: 8px;">USER IDENTIFICATION</div>
+                <div style="line-height: 1.8;">
+                <span style="color: #10b981;">Name:</span> ${data.name}<br>
+                <span style="color: #10b981;">Role:</span> ${data.title}<br>
+                ${currentJob ? `<span style="color: #10b981;">Company:</span> ${currentJob.company}<br>` : ''}
+                <span style="color: #10b981;">Location:</span> ${data.location}</div>`;
+            
+            const resultLine = document.createElement('div');
+            resultLine.className = 'mini-output-line';
+            resultLine.innerHTML = output;
+            miniOutput.appendChild(resultLine);
+            
+            // Then trigger red alert after short delay
+            setTimeout(() => {
+                this.startRedAlertSequence();
+            }, 1500);
+            
+            miniOutput.scrollTop = miniOutput.scrollHeight;
+            return;
+        }
+        
         if (cmd === 'help' || cmd === 'ls') {
             output = `<div class="help-text">Available commands:<br>
+                <span style="color: #00E5FF;">whoami</span> - Identify user<br>
                 <span style="color: #00E5FF;">scan</span> - About me<br>
                 <span style="color: #00E5FF;">hack</span> - Technical skills<br>
                 <span style="color: #00E5FF;">exploit</span> - Work experience<br>

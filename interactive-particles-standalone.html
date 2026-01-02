@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Particles - No NPM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            overflow: hidden;
+            background: rgba(18, 32, 35, 0.9);
+            font-family: 'Helvetica', Arial, sans-serif;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+            }
+        }
+    </script>
+
+    <script type="module">
+        // @ts-nocheck
+        import * as THREE from 'three';
+
+        let scene, camera, renderer;
+        let particles;
+        let touchTexture;
+        let particleGeometry;
+        let time = 0;
+        
+        // Audio variables
+        let audioContext, analyser, dataArray;
+        let audioElement;
+        let isPlaying = false;
+        let audioSourceNode = null;
+        let audioInitialized = false;
+        
+        // Audio file list
+        const audioFiles = [
+            'models/audio/This is not magic.mp3',
+            'models/audio/This bug wasnt hiding.mp3',
+            'models/audio/No alerts.mp3'
+        ];
+        
+        // Settings - Fixed constant values
+        const settings = {
+            density: 5,
+            particleSize: 0.8,
+            randomness: 4.0,
+            depth: 10.0,
+            mouseRadius: 150,
+            repulsionForce: 1.3
+        };
+
+        // Touch texture class
+        class TouchTexture {
+            constructor() {
+                this.size = 64;
+                this.maxAge = 120;
+                this.radius = 0.15;
+                this.trail = [];
+                this.initTexture();
+            }
+
+            initTexture() {
+                this.canvas = document.createElement('canvas');
+                this.canvas.width = this.canvas.height = this.size;
+                this.ctx = this.canvas.getContext('2d');
+                this.ctx.fillStyle = 'black';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                this.texture = new THREE.CanvasTexture(this.canvas);
+            }
+
+            update() {
+                this.clear();
+                this.trail.forEach((point, i) => {
+                    point.age++;
+                    if (point.age > this.maxAge) {
+                        this.trail.splice(i, 1);
+                    }
+                });
+                this.trail.forEach((point) => {
+                    this.drawTouch(point);
+                });
+                this.texture.needsUpdate = true;
+            }
+
+            clear() {
+                this.ctx.fillStyle = 'black';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+
+            addTouch(point) {
+                let force = 0;
+                const last = this.trail[this.trail.length - 1];
+                if (last) {
+                    const dx = last.x - point.x;
+                    const dy = last.y - point.y;
+                    const dd = dx * dx + dy * dy;
+                    force = Math.min(dd * 10000, 1);
+                }
+                this.trail.push({ x: point.x, y: point.y, age: 0, force });
+            }
+
+            drawTouch(point) {
+                const pos = {
+                    x: point.x * this.size,
+                    y: (1 - point.y) * this.size
+                };
+
+                let intensity = 1;
+                const maxAge = this.maxAge;
+                if (point.age < maxAge * 0.3) {
+                    intensity = this.easeOutSine(point.age / (maxAge * 0.3), 0, 1, 1);
+                } else {
+                    intensity = this.easeOutSine(1 - (point.age - maxAge * 0.3) / (maxAge * 0.7), 0, 1, 1);
+                }
+
+                intensity *= point.force;
+
+                const radius = this.size * this.radius * intensity;
+                const grd = this.ctx.createRadialGradient(pos.x, pos.y, radius * 0.25, pos.x, pos.y, radius);
+                grd.addColorStop(0, `rgba(255, 255, 255, 0.2)`);
+                grd.addColorStop(1, 'rgba(0, 0, 0, 0.0)');
+
+                this.ctx.beginPath();
+                this.ctx.fillStyle = grd;
+                this.ctx.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+
+            easeOutSine(t, b, c, d) {
+                return c * Math.sin(t / d * (Math.PI / 2)) + b;
+            }
+        }
+
+        const container = document.getElementById('container');
+
+        init();
+        animate();
+
+        function init() {
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color('rgb(18, 32, 35)');
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(
+                75,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                2000
+            );
+            camera.position.z = 400;
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Events
+            window.addEventListener('resize', onWindowResize);
+            renderer.domElement.addEventListener('mousemove', onMouseMove);
+            renderer.domElement.addEventListener('touchmove', onTouchMove, { passive: false });
+            
+            // Touch texture
+            touchTexture = new TouchTexture();
+
+            // Load default sample
+            loadDefaultImage();
+            
+            // Don't auto-play audio - let user control it
+            // playRandomAudio();
+        }
+
+        function playRandomAudio() {
+            // Pick a random audio file
+            const randomIndex = Math.floor(Math.random() * audioFiles.length);
+            const audioUrl = audioFiles[randomIndex];
+            
+            console.log('Playing:', audioUrl);
+            
+            // Load and play the audio
+            if (audioElement) {
+                audioElement.pause();
+                audioElement.src = '';
+            }
+
+            audioElement = new Audio(audioUrl);
+            
+            // Initialize audio context and analyser
+            if (!audioContext) {
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.error('Web Audio API is not supported in this browser', e);
+                    return;
+                }
+            }
+            
+            if (!analyser) {
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 256;
+                const bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+            }
+            
+            // Only create source once per audio element
+            if (!audioInitialized) {
+                audioSourceNode = audioContext.createMediaElementSource(audioElement);
+                audioSourceNode.connect(analyser);
+                analyser.connect(audioContext.destination);
+                audioInitialized = true;
+            }
+            
+            // Resume audio context if suspended
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            
+            audioElement.play().then(() => {
+                console.log('Audio playing successfully');
+                isPlaying = true;
+            }).catch(error => {
+                console.log('Waiting for user interaction to start audio...');
+                // Wait for any click to start audio
+                const startAudio = () => {
+                    if (audioContext && audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                    audioElement.play().then(() => {
+                        console.log('Audio started after user interaction');
+                        isPlaying = true;
+                    });
+                    document.removeEventListener('click', startAudio);
+                    document.removeEventListener('touchstart', startAudio);
+                };
+                document.addEventListener('click', startAudio);
+                document.addEventListener('touchstart', startAudio);
+            });
+
+            audioElement.onended = () => {
+                isPlaying = false;
+                // Reset for next audio
+                if (audioSourceNode) {
+                    audioSourceNode.disconnect();
+                    audioSourceNode = null;
+                }
+                audioInitialized = false;
+                // Play another random audio after a short delay
+                setTimeout(() => {
+                    playRandomAudio();
+                }, 1000);
+            };
+        }
+
+        function loadDefaultImage() {
+            // Load fixed image
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => {
+                console.log('Image loaded successfully');
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                try {
+                    ctx.drawImage(img, 0, 0);
+                    createParticlesFromCanvas(canvas);
+                } catch (error) {
+                    console.error('Canvas error:', error);
+                    createFallbackParticles();
+                }
+            };
+            img.onerror = (error) => {
+                console.error('Failed to load sample01.png', error);
+                createFallbackParticles();
+            };
+            img.src = 'models/sample01.png';
+        }
+        
+        function createFallbackParticles() {
+            // Fallback to gradient
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+            
+            const gradient = ctx.createRadialGradient(256, 256, 0, 256, 256, 256);
+            gradient.addColorStop(0, '#ff00ff');
+            gradient.addColorStop(0.5, '#00ffff');
+            gradient.addColorStop(1, '#0000ff');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 512, 512);
+            
+            createParticlesFromCanvas(canvas);
+        }
+
+
+
+        function createParticlesFromCanvas(canvas) {
+            // Remove existing particles
+            if (particles) {
+                scene.remove(particles);
+                if (particleGeometry) particleGeometry.dispose();
+                if (particles.material) particles.material.dispose();
+            }
+
+            const ctx = canvas.getContext('2d');
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const numPoints = width * height;
+
+            // Create texture from canvas
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.minFilter = THREE.LinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+
+            // Instanced geometry
+            particleGeometry = new THREE.InstancedBufferGeometry();
+
+            // Base quad
+            const positions = new THREE.BufferAttribute(new Float32Array(4 * 3), 3);
+            positions.setXYZ(0, -0.5,  0.5,  0.0);
+            positions.setXYZ(1,  0.5,  0.5,  0.0);
+            positions.setXYZ(2, -0.5, -0.5,  0.0);
+            positions.setXYZ(3,  0.5, -0.5,  0.0);
+            particleGeometry.setAttribute('position', positions);
+
+            // UVs
+            const uvs = new THREE.BufferAttribute(new Float32Array(4 * 2), 2);
+            uvs.setXY(0,  0.0,  0.0);
+            uvs.setXY(1,  1.0,  0.0);
+            uvs.setXY(2,  0.0,  1.0);
+            uvs.setXY(3,  1.0,  1.0);
+            particleGeometry.setAttribute('uv', uvs);
+
+            // Instance attributes
+            const indices = new Uint16Array(numPoints);
+            const offsets = new Float32Array(numPoints * 3);
+            const angles = new Float32Array(numPoints);
+
+            for (let i = 0; i < numPoints; i++) {
+                indices[i] = i;
+                offsets[i * 3 + 0] = i % width;
+                offsets[i * 3 + 1] = Math.floor(i / width);
+                angles[i] = Math.random() * Math.PI;
+            }
+
+            particleGeometry.setAttribute('pindex', new THREE.InstancedBufferAttribute(indices, 1, false));
+            particleGeometry.setAttribute('offset', new THREE.InstancedBufferAttribute(offsets, 3, false));
+            particleGeometry.setAttribute('angle', new THREE.InstancedBufferAttribute(angles, 1, false));
+
+            particleGeometry.setIndex(new THREE.BufferAttribute(new Uint16Array([0, 2, 1, 2, 3, 1]), 1));
+
+            // Shader material
+            const material = new THREE.RawShaderMaterial({
+                uniforms: {
+                    uTime: { value: 0 },
+                    uRandom: { value: settings.randomness },
+                    uDepth: { value: settings.depth },
+                    uSize: { value: settings.particleSize },
+                    uTextureSize: { value: new THREE.Vector2(width, height) },
+                    uTexture: { value: texture },
+                    uTouch: { value: touchTexture.texture },
+                    uAudio: { value: 0.0 },
+                    uAudioLow: { value: 0.0 },
+                    uAudioMid: { value: 0.0 },
+                    uAudioHigh: { value: 0.0 },
+                },
+                vertexShader: `
+                    precision highp float;
+
+                    attribute float pindex;
+                    attribute vec3 position;
+                    attribute vec3 offset;
+                    attribute vec2 uv;
+                    attribute float angle;
+
+                    uniform mat4 modelViewMatrix;
+                    uniform mat4 projectionMatrix;
+
+                    uniform float uTime;
+                    uniform float uRandom;
+                    uniform float uDepth;
+                    uniform float uSize;
+                    uniform vec2 uTextureSize;
+                    uniform sampler2D uTexture;
+                    uniform sampler2D uTouch;
+                    uniform float uAudio;
+                    uniform float uAudioLow;
+                    uniform float uAudioMid;
+                    uniform float uAudioHigh;
+
+                    varying vec2 vPUv;
+                    varying vec2 vUv;
+
+                    float random(float n) {
+                        return fract(sin(n) * 43758.5453123);
+                    }
+
+                    // Simple 2D noise
+                    float noise(vec2 p) {
+                        vec2 i = floor(p);
+                        vec2 f = fract(p);
+                        f = f * f * (3.0 - 2.0 * f);
+                        float a = random(i.x + i.y * 57.0);
+                        float b = random(i.x + 1.0 + i.y * 57.0);
+                        float c = random(i.x + (i.y + 1.0) * 57.0);
+                        float d = random(i.x + 1.0 + (i.y + 1.0) * 57.0);
+                        return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+                    }
+
+                    void main() {
+                        vUv = uv;
+
+                        vec2 puv = offset.xy / uTextureSize;
+                        vPUv = puv;
+
+                        vec4 colA = texture2D(uTexture, puv);
+                        float grey = colA.r * 0.21 + colA.g * 0.71 + colA.b * 0.07;
+
+                        vec3 displaced = offset;
+                        
+                        // Add randomness
+                        displaced.xy += vec2(random(pindex) - 0.5, random(offset.x + pindex) - 0.5) * uRandom;
+                        
+                        // Add depth variation with noise
+                        float rndz = (random(pindex) + noise(vec2(pindex * 0.1, uTime * 0.1)));
+                        displaced.z += rndz * (random(pindex) * 2.0 * uDepth);
+                        
+                        // Center the particles
+                        displaced.x -= uTextureSize.x / 2.0;
+                        displaced.y -= uTextureSize.y / 2.0;
+                        
+                        // MOUTH SPEAKING ANIMATION
+                        // Image coordinates: Y=0 is BOTTOM, Y=1 is TOP (inverted!)
+                        // Position correct - making regions even smaller and moving up
+                        
+                        // Upper lip area (opens upward) - tiny region
+                        float upperLip = step(0.473, puv.y) * step(puv.y, 0.480) * step(0.485, puv.x) * step(puv.x, 0.515);
+                        displaced.y += uAudio * 22.0 * upperLip; // Move up
+                        displaced.z += uAudio * 18.0 * upperLip; // Push forward
+                        
+                        // Lower lip/jaw area (opens downward - jaw drop) - tiny region
+                        float lowerLip = step(0.464, puv.y) * step(puv.y, 0.473) * step(0.485, puv.x) * step(puv.x, 0.515);
+                        displaced.y -= uAudio * 38.0 * lowerLip; // Strong jaw drop
+                        displaced.z += uAudio * 22.0 * lowerLip; // Push forward
+                        
+                        // Mouth corners stretch horizontally - tiny regions
+                        float leftCorner = step(0.467, puv.y) * step(puv.y, 0.473) * step(0.455, puv.x) * step(puv.x, 0.485);
+                        float rightCorner = step(0.467, puv.y) * step(puv.y, 0.473) * step(0.515, puv.x) * step(puv.x, 0.545);
+                        displaced.x -= uAudio * 14.0 * leftCorner;  // Stretch left
+                        displaced.x += uAudio * 14.0 * rightCorner; // Stretch right
+                        displaced.z += uAudio * 12.0 * (leftCorner + rightCorner); // Push corners forward
+                        
+                        // Chin moves down with jaw - tiny region
+                        float chinArea = step(0.450, puv.y) * step(puv.y, 0.463) * step(0.485, puv.x) * step(puv.x, 0.515);
+                        displaced.y -= uAudio * 16.0 * chinArea;
+                        displaced.z += uAudio * 10.0 * chinArea;
+                        
+                        // Full mouth region gets subtle flutter from mid frequencies - tiny
+                        float mouthRegion = step(0.462, puv.y) * step(puv.y, 0.482) * step(0.47, puv.x) * step(puv.x, 0.53);
+                        displaced.y -= uAudioMid * 7.0 * mouthRegion * sin(uTime * 3.0);
+                        displaced.x += uAudioMid * 5.0 * mouthRegion * cos(uTime * 2.5);
+                        
+                        // Touch interaction
+                        float t = texture2D(uTouch, puv).r;
+                        displaced.z -= t * 20.0 * rndz;
+                        displaced.x -= cos(angle) * t * 20.0 * rndz;
+                        displaced.y -= sin(angle) * t * 20.0 * rndz;
+
+                        // Particle size with variation
+                        float psize = (noise(vec2(uTime, pindex) * 0.5) + 2.0);
+                        psize *= max(grey, 0.2);
+                        psize *= uSize;
+                        psize *= (1.0 + uAudio * 0.5);
+
+                        vec4 mvPosition = modelViewMatrix * vec4(displaced, 1.0);
+                        mvPosition.xyz += position * psize;
+                        vec4 finalPosition = projectionMatrix * mvPosition;
+
+                        gl_Position = finalPosition;
+                    }
+                `,
+                fragmentShader: `
+                    precision highp float;
+
+                    uniform sampler2D uTexture;
+                    uniform float uAudio;
+
+                    varying vec2 vPUv;
+                    varying vec2 vUv;
+
+                    void main() {
+                        vec4 color = vec4(0.0);
+                        vec2 uv = vUv;
+                        vec2 puv = vPUv;
+
+                        vec4 colA = texture2D(uTexture, puv);
+
+                        float grey = colA.r * 0.21 + colA.g * 0.71 + colA.b * 0.07;
+                        vec4 colB = vec4(grey, grey, grey, 1.0);
+
+                        float border = 0.3;
+                        float radius = 0.5;
+                        float dist = radius - distance(uv, vec2(0.5));
+                        float t = smoothstep(0.0, border, dist);
+
+                        color = colB;
+                        color.a = t;
+
+                        gl_FragColor = color;
+                    }
+                `,
+                depthTest: false,
+                transparent: true,
+            });
+
+            particles = new THREE.Mesh(particleGeometry, material);
+            scene.add(particles);
+
+            console.log(`Created ${numPoints} particles`);
+        }
+
+        function onMouseMove(event) {
+            if (touchTexture && particles) {
+                const rect = renderer.domElement.getBoundingClientRect();
+                const x = (event.clientX - rect.left) / rect.width;
+                const y = (event.clientY - rect.top) / rect.height;
+                touchTexture.addTouch({ x, y });
+            }
+        }
+
+        function onTouchMove(event) {
+            if (event.touches.length > 0) {
+                event.preventDefault();
+                if (touchTexture && particles) {
+                    const rect = renderer.domElement.getBoundingClientRect();
+                    const x = (event.touches[0].clientX - rect.left) / rect.width;
+                    const y = (event.touches[0].clientY - rect.top) / rect.height;
+                    touchTexture.addTouch({ x, y });
+                }
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            time += 0.01;
+            
+            if (touchTexture) {
+                touchTexture.update();
+            }
+            
+            if (particles) {
+                particles.material.uniforms.uTime.value = time;
+                
+                // Update audio uniforms
+                if (isPlaying && audioElement && !audioElement.paused && analyser && dataArray) {
+                    analyser.getByteFrequencyData(dataArray);
+                    
+                    // Calculate average volume
+                    let sum = 0;
+                    for (let i = 0; i < dataArray.length; i++) {
+                        sum += dataArray[i];
+                    }
+                    const average = sum / dataArray.length;
+                    const normalizedVolume = average / 255;
+                    
+                    // Calculate frequency bands
+                    const lowFreq = dataArray.slice(0, 10).reduce((a, b) => a + b, 0) / 10 / 255;
+                    const midFreq = dataArray.slice(10, 30).reduce((a, b) => a + b, 0) / 20 / 255;
+                    const highFreq = dataArray.slice(30, 50).reduce((a, b) => a + b, 0) / 20 / 255;
+                    
+                    particles.material.uniforms.uAudio.value = normalizedVolume;
+                    particles.material.uniforms.uAudioLow.value = lowFreq;
+                    particles.material.uniforms.uAudioMid.value = midFreq;
+                    particles.material.uniforms.uAudioHigh.value = highFreq;
+                } else {
+                    // Smoothly decay audio values when not playing
+                    particles.material.uniforms.uAudio.value *= 0.95;
+                    particles.material.uniforms.uAudioLow.value *= 0.95;
+                    particles.material.uniforms.uAudioMid.value *= 0.95;
+                    particles.material.uniforms.uAudioHigh.value *= 0.95;
+                }
+            }
+            
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+{
+  "achievements": [
+    {
+      "type": "award",
+      "title": "Excellence in Quality",
+      "description": "Best QA Engineer Award 2024",
+      "icon": "trophy",
+      "date": "2024",
+      "organization": "The Elixr Labs"
+    },
+    {
+      "type": "bugs",
+      "title": "Bug Detection Stats",
+      "blocker": 45,
+      "critical": 128,
+      "major": 342,
+      "minor": 567,
+      "trivial": 234,
+      "total": 1316
+    },
+    {
+      "type": "tool",
+      "title": "Test Automation Framework",
+      "description": "Developed custom automation framework reducing test time by 60%",
+      "icon": "tool",
+      "impact": "60% faster"
+    },
+    {
+      "type": "tool",
+      "title": "Bug Tracking Dashboard",
+      "description": "Real-time analytics dashboard for bug tracking and team productivity",
+      "icon": "dashboard",
+      "impact": "40% efficiency gain"
+    },
+    {
+      "type": "activity",
+      "title": "Test Cases Written",
+      "value": "2,450+",
+      "description": "Comprehensive test coverage across multiple projects",
+      "icon": "document"
+    },
+    {
+      "type": "activity",
+      "title": "Code Reviews",
+      "value": "780+",
+      "description": "Quality assurance code reviews completed",
+      "icon": "code"
+    },
+    {
+      "type": "certification",
+      "title": "ISTQB Certified",
+      "description": "International Software Testing Qualifications Board",
+      "icon": "certificate",
+      "date": "2023"
+    },
+    {
+      "type": "activity",
+      "title": "API Tests Automated",
+      "value": "1,200+",
+      "description": "REST API endpoints tested and automated",
+      "icon": "api"
+    },
+    {
+      "type": "tool",
+      "title": "Performance Monitor",
+      "description": "Custom tool for monitoring application performance metrics",
+      "icon": "chart",
+      "impact": "Early detection"
+    },
+    {
+      "type": "activity",
+      "title": "Team Training Sessions",
+      "value": "50+",
+      "description": "Knowledge sharing sessions on QA best practices",
+      "icon": "education"
+    },
+    {
+      "type": "activity",
+      "title": "Regression Tests",
+      "value": "500+",
+      "description": "Comprehensive regression test cycles executed",
+      "icon": "document"
+    },
+    {
+      "type": "tool",
+      "title": "CI/CD Integration Tool",
+      "description": "Automated test integration with Github Actions",
+      "icon": "tool",
+      "impact": "100% automated"
+    },
+    {
+      "type": "activity",
+      "title": "ADA Tests",
+      "value": "450+",
+      "description": "Accessibility and compliance tests completed",
+      "icon": "shield"
+    },
+    {
+      "type": "award",
+      "title": "Most Valuable Person Award",
+      "description": "Recognition for actively participating, helping, and raising correct questions and bugs",
+      "icon": "momento",
+      "date": "2023",
+      "organization": "The Elixr Labs"
+    },
+    {
+      "type": "activity",
+      "title": "API Tests",
+      "value": "1,800+",
+      "description": "API testing scenarios created and executed",
+      "icon": "chart"
+    },
+    {
+      "type": "tool",
+      "title": "Test Data Generator",
+      "description": "Custom tool for generating realistic test data",
+      "icon": "database",
+      "impact": "50% time saved"
+    },
+    {
+      "type": "activity",
+      "title": "Cross-Browser Tests",
+      "value": "2,800+",
+      "description": "Multi-browser compatibility tests performed",
+      "icon": "browsers"
+    },
+    {
+      "type": "certification",
+      "title": "Selenium Certified",
+      "description": "Advanced Selenium WebDriver Certification",
+      "icon": "certificate",
+      "date": "2023"
+    },
+    {
+      "type": "activity",
+      "title": "Mobile App Tests",
+      "value": "890+",
+      "description": "iOS and Android application testing",
+      "icon": "mobile"
+    },
+    {
+      "type": "tool",
+      "title": "Deployment Validator",
+      "description": "Reduce redundant work and human errors during manual verification of deployments",
+      "icon": "ai",
+      "impact": "90% effort reduction"
+    },
+    {
+      "type": "activity",
+      "title": "Database Tests",
+      "value": "1,100+",
+      "description": "Database integrity and migration tests",
+      "icon": "database"
+    },
+    {
+      "type": "award",
+      "title": "Spot Award",
+      "description": "Outstanding collaboration and mentorship",
+      "icon": "trophy",
+      "date": "2024",
+      "organization": "The Elixr Labs"
+    }
+  ]
+}

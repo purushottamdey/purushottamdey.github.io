@@ -6,19 +6,17 @@
   "email": "purushottam.dey@outlook.com",
   "github": "https://github.com/purushottamdey",
   "linkedin": "https://www.linkedin.com/in/purushottam-dey2/",
-  "about": "I’m a detail-driven QA Engineer with a strong passion for ensuring high-quality, reliable software. I specialize in test automation, API testing, and validating complex systems, with hands-on experience across web and mobile applications. I enjoy improving test processes, building efficient test solutions, and continuously upskilling in modern technologies. Currently, I’m expanding my expertise in automation frameworks, cloud platforms, and scalable application testing.",
+  "about": "I'm a passionate developer with expertise in building modern web applications.\nI love creating efficient, scalable solutions and exploring new technologies.\nCurrently focused on full-stack development with a keen interest in DevOps and cloud technologies.",
   "skills": [
-  { "name": "Manual Testing (Web & Mobile)", "level": "Expert", "icon": "check-circle" },
-  { "name": "Automation Testing (Selenium)", "level": "Advanced", "icon": "automation" },
-  { "name": "Playwright", "level": "Intermediate", "icon": "browser" },
-  { "name": "Mobile App Testing (Android & iOS)", "level": "Advanced", "icon": "mobile" },
-  { "name": "Test Framework Design (POM, BDD)", "level": "Advanced", "icon": "layers" },
-  { "name": "API Testing (REST)", "level": "Advanced", "icon": "api" },
-  { "name": "HL7 Message Testing", "level": "Advanced", "icon": "activity" },
-  { "name": "JIRA & Confluence (JQL)", "level": "Advanced", "icon": "workflow" },
-  { "name": "CI/CD & Git", "level": "Intermediate", "icon": "git-branch" },
-  { "name": "Cross-Browser & Device Testing (Seecloud)", "level": "Advanced", "icon": "devices" }
-],
+    { "name": "JavaScript/TypeScript", "level": "Expert", "icon": "code" },
+    { "name": "React/Vue/Angular", "level": "Advanced", "icon": "component" },
+    { "name": "Node.js/Express", "level": "Advanced", "icon": "server" },
+    { "name": "Python/Django", "level": "Intermediate", "icon": "python" },
+    { "name": "Database (SQL/NoSQL)", "level": "Advanced", "icon": "database" },
+    { "name": "Docker/Kubernetes", "level": "Intermediate", "icon": "container" },
+    { "name": "AWS/Azure/GCP", "level": "Intermediate", "icon": "cloud" },
+    { "name": "Git/CI/CD", "level": "Advanced", "icon": "git" }
+  ],
   "experience": [
     {
       "title": "Jr. QA Engineer",
@@ -28,89 +26,43 @@
     }
   ],
   "projects": [
-  {
-    "name": "Clinical Application UI & Backend Testing",
-    "description": "Tested a healthcare clinical application involving patient management, lab results, and provider workflows. Validated UI functionality and backend data consistency from multiple external systems.",
-    "github": "",
-    "tech": ["Web UI Testing", "Backend Validation", "Healthcare Domain", "HL7"]
-  },
-  {
-    "name": "Selenium Automation Test Suite",
-    "description": "Designed and developed a Selenium-based automation framework using POM and BDD principles to automate regression and smoke test cases for a clinical web application.",
-    "github": "",
-    "tech": ["Selenium WebDriver", "Java", "TestNG", "POM", "BDD"]
-  },
-  {
-    "name": "HL7 Test Data Import & Validation Tool",
-    "description": "Built an internal testing tool to generate and import HL7 test data, enabling non-HL7 users to test patient and lab workflows without manual message creation.",
-    "github": "",
-    "tech": ["HL7", "Healthcare Integration", "Test Data Management", "Automation Support"]
-  },
-  {
-    "name": "Mobile Clinical App Testing",
-    "description": "Performed functional, regression, and compatibility testing for iOS and Android clinical applications using real devices and cloud-based device farms.",
-    "github": "",
-    "tech": ["Android Testing", "iOS Testing", "Seecloud", "Mobile QA"]
-  }
-],
+    {
+      "name": "E-Commerce Platform",
+      "description": "Full-stack e-commerce solution with React, Node.js, and MongoDB",
+      "github": "https://github.com/yourusername/ecommerce-platform",
+      "tech": ["React", "Node.js", "MongoDB", "Redis"]
+    },
+    {
+      "name": "Real-time Chat Application",
+      "description": "WebSocket-based chat app with end-to-end encryption",
+      "github": "https://github.com/yourusername/chat-app",
+      "tech": ["Socket.io", "Express", "PostgreSQL"]
+    },
+    {
+      "name": "DevOps Dashboard",
+      "description": "Monitoring dashboard for containerized applications",
+      "github": "https://github.com/yourusername/devops-dashboard",
+      "tech": ["Vue.js", "Docker", "Kubernetes", "Prometheus"]
+    }
+  ],
   "certifications": [
-  {
-    "name": "Introduction to the Basics of Azure Services",
-    "issuer": "Simplilearn",
-    "date": "Mar 2025",
-    "credentialId": "7995990"
-  },
-  {
-    "name": "1 Minute Typing Test",
-    "issuer": "Typing",
-    "date": "Oct 2024",
-    "credentialId": "316147791-161656169"
-  },
-  {
-    "name": "Fundamentals of Cucumber Testing",
-    "issuer": "Great Learning",
-    "date": "Sep 2024",
-    "credentialId": "YUYIFETD"
-  },
-  {
-    "name": "Learn How To Design Seamless Notification Services",
-    "issuer": "Scaler",
-    "date": "Sep 2024",
-    "credentialId": null
-  },
-  {
-    "name": "Top Design Patterns in Java",
-    "issuer": "Scaler",
-    "date": "Sep 2024",
-    "credentialId": "yhLgjeG19B"
-  },
-  {
-    "name": "SQL (Basic) Certificate",
-    "issuer": "HackerRank",
-    "date": "Mar 2023",
-    "credentialId": "3E288659D8CA"
-  },
-  {
-    "name": "Scrum Fundamentals Certified (SFC)",
-    "issuer": "Vabro.ai / VMEdu.com",
-    "date": "Mar 2023",
-    "credentialId": "970090"
-  },
-  {
-    "name": "Flutter for Beginners",
-    "issuer": "Great Learning",
-    "date": null,
-    "credentialId": null
-  },
-  {
-    "name": "Leadership & Customer Communications Skills Training",
-    "issuer": "Sharp Skills",
-    "date": null,
-    "credentialId": null
-  }
-]
+    {
+      "name": "AWS Certified Solutions Architect",
+      "issuer": "Amazon Web Services",
+      "date": "2023",
+      "credentialId": "ABC123XYZ"
+    },
+    {
+      "name": "Certified Kubernetes Administrator",
+      "issuer": "Cloud Native Computing Foundation",
+      "date": "2022",
+      "credentialId": "CKA-2022-001"
+    },
+    {
+      "name": "Professional Scrum Master I",
+      "issuer": "Scrum.org",
+      "date": "2021",
+      "credentialId": "PSM-123456"
+    }
+  ]
 }
-
-
-
-
