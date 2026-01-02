@@ -6,7 +6,7 @@
   "email": "purushottam.dey@outlook.com",
   "github": "https://github.com/purushottamdey",
   "linkedin": "https://www.linkedin.com/in/purushottam-dey2/",
-  "about": "I'm a passionate developer with expertise in building modern web applications.\nI love creating efficient, scalable solutions and exploring new technologies.\nCurrently focused on full-stack development with a keen interest in DevOps and cloud technologies.",
+  "about": "I’m a detail-driven QA Engineer with a strong passion for ensuring high-quality, reliable software. I specialize in test automation, API testing, and validating complex systems, with hands-on experience across web and mobile applications. I enjoy improving test processes, building efficient test solutions, and continuously upskilling in modern technologies. Currently, I’m expanding my expertise in automation frameworks, cloud platforms, and scalable application testing.",
   "skills": [
   { "name": "Manual Testing (Web & Mobile)", "level": "Expert", "icon": "check-circle" },
   { "name": "Automation Testing (Selenium)", "level": "Advanced", "icon": "automation" },
@@ -110,6 +110,7 @@
   }
 ]
 }
+
 
 
 
