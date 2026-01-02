@@ -1,0 +1,375 @@
+/* Red Alert Error Screen Styles */
+.red-alert-screen {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 5000;
+    pointer-events: none;
+}
+
+.red-alert-screen.active {
+    display: block !important;
+}
+
+/* Red theme changes for entire project */
+body.red-alert-active {
+    background: radial-gradient(circle at center, #330000 0%, #1a0000 50%, #000000 100%);
+    animation: redFlash 1s ease-in-out infinite alternate;
+}
+
+body.red-alert-active::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 0, 0, 0.03) 2px,
+        rgba(255, 0, 0, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+    animation: scanlines 0.5s linear infinite;
+}
+
+@keyframes scanlines {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(4px); }
+}
+
+body.red-alert-active .intro-sequence {
+    background: rgba(26, 0, 0, 0.9);
+}
+
+body.red-alert-active .target-screen,
+body.red-alert-active .globe-screen,
+body.red-alert-active .datacenter-screen {
+    border-color: #ff0000 !important;
+    box-shadow: 0 0 30px rgba(255,0,0,0.6) !important;
+    background: rgba(26, 0, 0, 0.8) !important;
+}
+
+body.red-alert-active .id-card,
+body.red-alert-active .datacenter-popup,
+body.red-alert-active .ai-mesh-card {
+    border-color: #ff0000 !important;
+    box-shadow: 0 0 20px rgba(255,0,0,0.5) !important;
+    background: rgba(26, 0, 0, 0.95) !important;
+}
+
+body.red-alert-active .ai-mesh-card h2,
+body.red-alert-active .mesh-card-header h2 {
+    color: #ff0000 !important;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.8) !important;
+}
+
+body.red-alert-active .status-indicator {
+    color: #ff0000 !important;
+}
+
+body.red-alert-active .pulse-dot {
+    background: #ff0000 !important;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.8) !important;
+}
+
+body.red-alert-active .mesh-card-header {
+    border-bottom-color: rgba(255, 0, 0, 0.3) !important;
+}
+
+body.red-alert-active .terminal-card {
+    border-color: #ff0000 !important;
+    box-shadow: 0 0 30px rgba(255,0,0,0.5) !important;
+    background: rgba(0, 0, 0, 0.9) !important;
+}
+
+body.red-alert-active #particles-js {
+    opacity: 0.3;
+    filter: hue-rotate(180deg) brightness(0.5);
+}
+
+body.red-alert-active .terminal-container {
+    filter: brightness(0.9) saturate(0.8);
+}
+
+@keyframes redFlash {
+    0% { background: #1a0000; }
+    100% { background: #330000; }
+}
+
+.alert-content {
+    position: relative;
+    z-index: 10;
+    max-width: 450px;
+    width: auto;
+    min-width: 400px;
+    padding: 30px 25px;
+    background: rgba(0,0,0,0.95);
+    border: 3px solid #ff0000;
+    box-shadow: 0 0 50px rgba(255,0,0,0.8),
+                inset 0 0 50px rgba(255,0,0,0.2);
+    text-align: center;
+    animation: shake 0.5s ease-in-out infinite;
+    pointer-events: auto;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.alert-warning-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    stroke: #ff0000;
+    animation: iconPulse 1s ease-in-out infinite;
+}
+
+.alert-warning-icon svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 20px #ff0000);
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.alert-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ff0000;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 20px #ff0000;
+    animation: glitchTitle 0.3s ease-in-out infinite;
+}
+
+@keyframes glitchTitle {
+    0%, 100% { text-shadow: 0 0 20px #ff0000; }
+    50% { text-shadow: -2px 0 20px #ff0000, 2px 0 20px #00ffff; }
+}
+
+.alert-code {
+    font-size: 18px;
+    color: #ff6666;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 15px;
+}
+
+.alert-message {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 15px;
+    padding: 12px;
+    background: rgba(255,0,0,0.1);
+    border: 1px solid #ff0000;
+}
+
+.alert-details {
+    text-align: left;
+    margin: 15px 0;
+    padding: 12px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid #ff0000;
+}
+
+.detail-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,0,0,0.3);
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+.detail-line:last-child {
+    border-bottom: none;
+}
+
+.detail-line .label {
+    color: #ff6666;
+    font-weight: bold;
+}
+
+.detail-line .value {
+    color: #fff;
+}
+
+.detail-line .value.critical {
+    color: #ff0000;
+    font-weight: bold;
+    animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0.5; }
+}
+
+.alert-progress {
+    margin: 15px 0;
+}
+
+.progress-label {
+    color: #ff6666;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 20px;
+    background: rgba(0,0,0,0.5);
+    border: 2px solid #ff0000;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff0000, #ff6666, #ff0000);
+    background-size: 200% 100%;
+    width: 0%;
+    animation: progressGlow 2s linear infinite;
+    box-shadow: 0 0 20px rgba(255,0,0,0.8);
+}
+
+@keyframes progressGlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+.progress-percent {
+    color: #ff0000;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    font-family: 'Courier New', monospace;
+}
+
+.glitch-text {
+    font-size: 24px;
+    color: #ff0000;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 15px;
+    animation: glitch 1s ease-in-out infinite;
+    text-shadow: 2px 0 #00ffff, -2px 0 #ffff00;
+}
+
+@keyframes glitch {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+}
+
+.scan-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(255,0,0,0.1) 0px,
+        transparent 2px,
+        transparent 4px
+    );
+    pointer-events: none;
+    animation: scanMove 8s linear infinite;
+}
+
+@keyframes scanMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(20px); }
+}
+
+.corner-brackets {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.bracket {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 3px solid #ff0000;
+}
+
+.bracket.tl {
+    top: 20px;
+    left: 20px;
+    border-right: none;
+    border-bottom: none;
+    animation: bracketGlow 2s ease-in-out infinite;
+}
+
+.bracket.tr {
+    top: 20px;
+    right: 20px;
+    border-left: none;
+    border-bottom: none;
+    animation: bracketGlow 2s ease-in-out infinite 0.5s;
+}
+
+.bracket.bl {
+    bottom: 20px;
+    left: 20px;
+    border-right: none;
+    border-top: none;
+    animation: bracketGlow 2s ease-in-out infinite 1s;
+}
+
+.bracket.br {
+    bottom: 20px;
+    right: 20px;
+    border-left: none;
+    border-top: none;
+    animation: bracketGlow 2s ease-in-out infinite 1.5s;
+}
+
+@keyframes bracketGlow {
+    0%, 100% { box-shadow: 0 0 10px #ff0000; }
+    50% { box-shadow: 0 0 30px #ff0000; }
+}
+
+/* Red theme for terminal when alert is active */
+body.red-alert-active .terminal-container,
+body.red-alert-active .terminal-body,
+body.red-alert-active .minimized-terminal-card {
+    border-color: #ff0000 !important;
+    box-shadow: 0 0 20px rgba(255,0,0,0.5) !important;
+}
+
+body.red-alert-active .command-input,
+body.red-alert-active .mini-command-input {
+    color: #ff0000 !important;
+}
+
+body.red-alert-active .prompt,
+body.red-alert-active .mini-prompt {
+    color: #ff0000 !important;
+}
+
+body.red-alert-active .output-container {
+    color: #ffcccc !important;
+}
