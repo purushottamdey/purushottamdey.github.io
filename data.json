@@ -54,25 +54,62 @@
   }
 ],
   "certifications": [
-    {
-      "name": "AWS Certified Solutions Architect",
-      "issuer": "Amazon Web Services",
-      "date": "2023",
-      "credentialId": "ABC123XYZ"
-    },
-    {
-      "name": "Certified Kubernetes Administrator",
-      "issuer": "Cloud Native Computing Foundation",
-      "date": "2022",
-      "credentialId": "CKA-2022-001"
-    },
-    {
-      "name": "Professional Scrum Master I",
-      "issuer": "Scrum.org",
-      "date": "2021",
-      "credentialId": "PSM-123456"
-    }
-  ]
+  {
+    "name": "Introduction to the Basics of Azure Services",
+    "issuer": "Simplilearn",
+    "date": "Mar 2025",
+    "credentialId": "7995990"
+  },
+  {
+    "name": "1 Minute Typing Test",
+    "issuer": "Typing",
+    "date": "Oct 2024",
+    "credentialId": "316147791-161656169"
+  },
+  {
+    "name": "Fundamentals of Cucumber Testing",
+    "issuer": "Great Learning",
+    "date": "Sep 2024",
+    "credentialId": "YUYIFETD"
+  },
+  {
+    "name": "Learn How To Design Seamless Notification Services",
+    "issuer": "Scaler",
+    "date": "Sep 2024",
+    "credentialId": null
+  },
+  {
+    "name": "Top Design Patterns in Java",
+    "issuer": "Scaler",
+    "date": "Sep 2024",
+    "credentialId": "yhLgjeG19B"
+  },
+  {
+    "name": "SQL (Basic) Certificate",
+    "issuer": "HackerRank",
+    "date": "Mar 2023",
+    "credentialId": "3E288659D8CA"
+  },
+  {
+    "name": "Scrum Fundamentals Certified (SFC)",
+    "issuer": "Vabro.ai / VMEdu.com",
+    "date": "Mar 2023",
+    "credentialId": "970090"
+  },
+  {
+    "name": "Flutter for Beginners",
+    "issuer": "Great Learning",
+    "date": null,
+    "credentialId": null
+  },
+  {
+    "name": "Leadership & Customer Communications Skills Training",
+    "issuer": "Sharp Skills",
+    "date": null,
+    "credentialId": null
+  }
+]
 }
+
 
 
