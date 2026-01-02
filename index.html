@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.8, maximum-scale=2.0, user-scalable=yes">
     <title>Terminal Portfolio</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
     <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2">
+    <link rel="stylesheet" href="red-alert.css?v=2">
 </head>
 <body>
     <!-- particles.js container -->
@@ -112,18 +114,35 @@
     <div class="intro-sequence" id="introSequence">
         <!-- Target Acquired Screen -->
         <div class="target-screen" id="targetScreen">
+            <!-- Sound Enable Prompt -->
+            <div class="sound-prompt" id="soundPrompt">
+                <div class="sound-prompt-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 48px; height: 48px; margin-bottom: 15px;">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                    </svg>
+                    <h3>ENABLE AUDIO?</h3>
+                    <p>Sound effects enhance the experience</p>
+                    <div class="sound-prompt-buttons">
+                        <button class="sound-btn sound-yes" id="soundYes">YES</button>
+                        <button class="sound-btn sound-no" id="soundNo">NO</button>
+                    </div>
+                </div>
+            </div>
+            
             <!-- HUD Crosshair -->
-            <div class="hud-crosshair">
+            <div class="hud-crosshair" style="display: none;" id="hudElements">
                 <div class="crosshair-v"></div>
                 <div class="crosshair-h"></div>
                 <div class="crosshair-circle"></div>
             </div>
             
             <!-- Scanning Grid -->
-            <div class="scan-grid"></div>
+            <div class="scan-grid" style="display: none;"></div>
             
             <!-- ID Card Wrapper -->
-            <div class="id-card-wrapper">
+            <div class="id-card-wrapper" style="display: none;">
                 <div class="id-card">
                     <div class="profile-row">
                         <div class="dp">
@@ -238,19 +257,19 @@
                         <span>ACTIVE</span>
                     </div>
                 </div>
-                <canvas id="meshCanvas" width="400" height="500"></canvas>
+                <iframe id="particlesFrame" src="interactive-particles-standalone.html" width="400" height="500" style="border: none; display: block; background: rgba(18, 32, 35, 0.9);"></iframe>
                 <div class="mesh-stats">
                     <div class="stat-item">
-                        <span class="stat-label">NODES:</span>
-                        <span class="stat-value" id="nodeCount">0</span>
+                        <span class="stat-label">MODE:</span>
+                        <span class="stat-value">AUDIO REACTIVE</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">CONNECTIONS:</span>
-                        <span class="stat-value" id="connectionCount">0</span>
+                        <span class="stat-label">PARTICLES:</span>
+                        <span class="stat-value">50151</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">PATTERN:</span>
-                        <span class="stat-value">HUMANOID</span>
+                        <span class="stat-label">STATUS:</span>
+                        <span class="stat-value">INTERACTIVE</span>
                     </div>
                 </div>
             </div>
@@ -427,6 +446,41 @@
                 <!-- Data will be revealed here -->
             </div>
         </div>
+    </div>
+
+    <!-- Red Alert Error Screen -->
+    <div class="red-alert-screen" id="redAlertScreen" style="display: none;">
+        <div class="alert-content">
+            <div class="alert-warning-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            <div class="alert-title">SECURITY BREACH DETECTED</div>
+            <div class="alert-code">ERROR CODE: 0x8000FFFF</div>
+            <div class="alert-message" id="alertMessage">UNAUTHORIZED ACCESS ATTEMPT</div>
+            <div class="alert-details">
+                <div class="detail-line"><span class="label">THREAT LEVEL:</span> <span class="value critical">CRITICAL</span></div>
+                <div class="detail-line"><span class="label">SOURCE IP:</span> <span class="value" id="sourceIP">DETECTING...</span></div>
+                <div class="detail-line"><span class="label">LOCATION:</span> <span class="value" id="sourceLocation">TRACING...</span></div>
+                <div class="detail-line"><span class="label">STATUS:</span> <span class="value critical">SYSTEM LOCKDOWN INITIATED</span></div>
+            </div>
+            <div class="alert-progress">
+                <div class="progress-label">ANALYZING THREAT...</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="alertProgress"></div>
+                </div>
+                <div class="progress-percent" id="alertPercent">0%</div>
+            </div>
+            <div class="glitch-text" id="glitchText">SYSTEM COMPROMISED</div>
+        </div>
+    </div>
+
+    <!-- DDoS Attack Simulation -->
+    <div class="ddos-container" id="ddosContainer" style="display: none;">
+        <!-- Achievement cards will be injected here dynamically -->
     </div>
 
     <!-- External Libraries -->
